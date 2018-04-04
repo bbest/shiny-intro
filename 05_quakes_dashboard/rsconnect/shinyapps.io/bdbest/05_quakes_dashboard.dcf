@@ -1,0 +1,12 @@
+name: 05_quakes_dashboard
+title: 05_quakes_dashboard
+username:
+account: bdbest
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 314840
+bundleId: 1301124
+url: https://bdbest.shinyapps.io/05_quakes_dashboard/
+when: 1522815993.42579
+asMultiple: FALSE
+asStatic: FALSE
