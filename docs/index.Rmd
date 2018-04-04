@@ -1,21 +1,52 @@
 ---
-title: "Preparation"
+title: "Shiny prep"
 author: "Ben Best"
 date: "April 3, 2018"
 output:
   html_document:
     toc: true
     toc_float: true
-    code_folding: hide
+    code_folding: show
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = F)
 ```
 
-- [HTML Documents](https://rmarkdown.rstudio.com/html_document_format.html#code_folding)
+## Download
 
-## Histogram - `mag`
+To run locally, first download the repository of files here:
+
+- https://github.com/bbest/shiny-intro/archive/master.zip
+
+Then unzip and launch RStudio into that working directory by double-clicking on the `shiny-intro.Rproj` file.
+
+## `01_faithful`
+
+- Code: [01_faithful](https://github.com/bbest/shiny-intro/tree/master/01_faithful)
+
+- Run from GitHub:
+  ```r
+  shiny::runGitHub("bbest/shiny-intro", subdir="01_faithful")
+  ```
+
+- Run locally:
+  ```r
+  shiny::runApp("01_faithful")
+  ```
+  
+In order to quickly experiment with visualization, we could pull the code from within the rendering function of the Shiny app and set the input list values that would otherwise be set from the user interface...
+
+```{r}
+input = list(bins = 30)
+
+x <- faithful[, 2] 
+bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    
+hist(x, breaks = bins, col = 'darkgray', border = 'white')
+```
+
+## `02_quakes_mag`
 
 ```{r}
 library(tidyverse)
@@ -27,18 +58,32 @@ d <- quakes %>%
     mag >= input$slider_mag[1],
     mag <= input$slider_mag[2])
 
-# draw the histogram of quakes
 hist(d$mag, col = 'darkgray', border = 'white')
 ```
 
-## Histogram - `mag` or `depth`
+
+- Code: [02_quakes_mag](https://github.com/bbest/shiny-intro/tree/master/02_quakes_mag)
+
+- Run from GitHub:
+  ```r
+  shiny::runGitHub("bbest/shiny-intro", subdir="02_quakes_mag")
+  ```
+
+- Run locally:
+  ```r
+  shiny::runApp("02_quakes_mag")
+  ```
+
+## `03_quakes_depth`
 
 ```{r}
 library(tidyverse)
 
-input <- list(select_var = "depth", slider_mag = c(4, 5), slider_depth = c(0, 100))
+input <- list(
+  select_var = "depth", 
+  slider_mag = c(4, 5), 
+  slider_depth = c(0, 100))
 
-# filter
 d <- quakes %>%
   filter(
     mag   >= input$slider_mag[1],
@@ -46,29 +91,87 @@ d <- quakes %>%
     depth >= input$slider_depth[1],
     depth <= input$slider_depth[2])
 
-# hist
 hist(d[,input$select_var], col = 'darkgray', border = 'white')
 ```
 
-## Map - `addMarkers()`
+- Code: [03_quakes_depth](https://github.com/bbest/shiny-intro/tree/master/03_quakes_depth)
+
+- Run from GitHub:
+  ```r
+  shiny::runGitHub("bbest/shiny-intro", subdir="03_quakes_depth")
+  ```
+
+- Run locally:
+  ```r
+  shiny::runApp("03_quakes_depth")
+  ```
+
+* [shiny-intro/04_quakes_map at master · bbest/shiny-intro](https://github.com/bbest/shiny-intro/tree/master/04_quakes_map)
+* [shiny-intro/05_quakes_dashboard at master · bbest/shiny-intro](https://github.com/bbest/shiny-intro/tree/master/05_quakes_dashboard)
+* [Fiji earthquakes](http://benbestphd.com/shiny-intro/crosstalk.html)
+
+## `04_quakes_map`
 
 - [Leaflet for R - Markers](http://rstudio.github.io/leaflet/markers.html#icon-markers)
 
 ```{r}
 library(leaflet)
-
-# Show first 20 rows from the `quakes` dataset
-leaflet(data = quakes[1:20,]) %>% addTiles() %>%
-  addMarkers(~long, ~lat, popup = ~as.character(mag), label = ~as.character(mag))
-```
-
-## Map - `addCircleMarkers()`
-
-```{r}
 library(glue)
+
 leaflet(data = quakes[1:20,]) %>% addTiles() %>%
   addCircleMarkers(
     radius = ~mag, color = "red", stroke = FALSE, fillOpacity = 0.5,
     popup = ~glue("mag: {mag}<br>depth: {depth} m"), label = ~as.character(mag))
+```
+
+- Code: [04_quakes_map](https://github.com/bbest/shiny-intro/tree/master/04_quakes_map)
+
+- Run from GitHub:
+  ```r
+  shiny::runGitHub("bbest/shiny-intro", subdir="04_quakes_map")
+  ```
+
+- Run locally:
+  ```r
+  shiny::runApp("04_quakes_map")
+  ```
+  
+## `05_quakes_dashboard`
+
+- http://rstudio.github.io/shinydashboard/
+
+- Code: [05_quakes_dashboard](https://github.com/bbest/shiny-intro/tree/master/05_quakes_dashboard)
+
+- Run from GitHub:
+  ```r
+  shiny::runGitHub("bbest/shiny-intro", subdir="05_quakes_dashboard")
+  ```
+
+- Run locally:
+  ```r
+  shiny::runApp("05_quakes_dashboard")
+  ```
+  
+## Rmarkdown using Crosstalk
+
+```{r}
+library(crosstalk)
+library(leaflet)
+library(DT)
+
+# Wrap data frame in SharedData
+sd <- SharedData$new(quakes[sample(nrow(quakes), 100),])
+
+# Create a filter input
+filter_slider("mag", "Magnitude", sd, column=~mag, step=0.1, width=250)
+
+# Use SharedData like a dataframe with Crosstalk-enabled widgets
+bscols(
+  leaflet(sd) %>% 
+    addTiles() %>% 
+    addMarkers(),
+  datatable(
+    sd, extensions="Scroller", style="bootstrap", class="compact", width="100%",
+    options=list(deferRender=TRUE, scrollY=300, scroller=TRUE)))
 ```
 
