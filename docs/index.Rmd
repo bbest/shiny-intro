@@ -1,0 +1,74 @@
+---
+title: "Preparation"
+author: "Ben Best"
+date: "April 3, 2018"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F)
+```
+
+- [HTML Documents](https://rmarkdown.rstudio.com/html_document_format.html#code_folding)
+
+## Histogram - `mag`
+
+```{r}
+library(tidyverse)
+
+input <- list(slider_mag = c(4, 6))
+
+d <- quakes %>%
+  filter(
+    mag >= input$slider_mag[1],
+    mag <= input$slider_mag[2])
+
+# draw the histogram of quakes
+hist(d$mag, col = 'darkgray', border = 'white')
+```
+
+## Histogram - `mag` or `depth`
+
+```{r}
+library(tidyverse)
+
+input <- list(select_var = "depth", slider_mag = c(4, 5), slider_depth = c(0, 100))
+
+# filter
+d <- quakes %>%
+  filter(
+    mag   >= input$slider_mag[1],
+    mag   <= input$slider_mag[2],
+    depth >= input$slider_depth[1],
+    depth <= input$slider_depth[2])
+
+# hist
+hist(d[,input$select_var], col = 'darkgray', border = 'white')
+```
+
+## Map - `addMarkers()`
+
+- [Leaflet for R - Markers](http://rstudio.github.io/leaflet/markers.html#icon-markers)
+
+```{r}
+library(leaflet)
+
+# Show first 20 rows from the `quakes` dataset
+leaflet(data = quakes[1:20,]) %>% addTiles() %>%
+  addMarkers(~long, ~lat, popup = ~as.character(mag), label = ~as.character(mag))
+```
+
+## Map - `addCircleMarkers()`
+
+```{r}
+library(glue)
+leaflet(data = quakes[1:20,]) %>% addTiles() %>%
+  addCircleMarkers(
+    radius = ~mag, color = "red", stroke = FALSE, fillOpacity = 0.5,
+    popup = ~glue("mag: {mag}<br>depth: {depth} m"), label = ~as.character(mag))
+```
+
