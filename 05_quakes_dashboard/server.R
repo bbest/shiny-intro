@@ -2,7 +2,7 @@ shinyServer(function(input, output, session) {
   
   get_df <- reactive({
     
-    df <- quakes %>%
+    df <- q %>%
       filter(
         mag   >= input$slider_mag[1],
         mag   <= input$slider_mag[2],

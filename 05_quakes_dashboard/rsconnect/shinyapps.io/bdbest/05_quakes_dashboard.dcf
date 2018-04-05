@@ -5,8 +5,8 @@ account: bdbest
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 314840
-bundleId: 1301124
+bundleId: 1302364
 url: https://bdbest.shinyapps.io/05_quakes_dashboard/
-when: 1522815993.42579
+when: 1522869096.43212
 asMultiple: FALSE
 asStatic: FALSE
