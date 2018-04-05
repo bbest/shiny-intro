@@ -15,13 +15,33 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE, message = F)
 ```
 
+## Background
+
+Here's a presentation to accompany these introductory materials:
+
+  [Creating Interactive Web Applications with R & Shiny](http://bit.ly/shiny-2018-04)
+
+Numbered folders in this repository correspond with iterative development and enhancement of a Shiny app:
+
+- `01_faithful`: default app from using RStudio, File > New File > Shiny Web App…
+  ![](screenshot-01_faithful.png)
+- `02_quakes_mag`: swap to quakes dataset, adjust histogram by magnitude
+- `03_quakes_depth`: add depth slider, select box for variable to histogram
+- `04_quakes_map`: add leaflet map
+- `05_quakes_dashboard`: enhance ui with shinydashboard
+  ![](screenshot-05_quakes_dashboard.png)
+
+The latest versions of [R](https://cloud.r-project.org/) and [RStudio](https://www.rstudio.com/products/rstudio/download/#download) are highly recommended to follow along.
+
+The following sections in this Rmarkdown document demonstrate how you can develop output visualizations for use in a Shiny app, especially by defining input variables as a list (`input$*`). Knitting this Rmarkdown document `docs/index.Rmd` to `docs/index.html` in this repo and pushing to Github then allows the HTML to be viewable at https://bbest.github.io/shiny-intro (using the [Github Pages](https://pages.github.com) feature). In contrast, note that Github and most web hosting services can __*not*__ host a Shiny app. Although the [leaflet](http://rstudio.github.io/leaflet) and [plotly](https://plot.ly/ggplot2) visualizations in this document are interactive in the web browser, they do not require the Shiny library or a Shiny server to be displayed. Rather, the HTML output can be easily hosted on the most basic web server or passed as an email attachment. The Shiny context allows for ultimate flexibility with user interactions, but may be overkill for basic visualization. Check out all the amazing [htmlwidgets.org](http://www.htmlwidgets.org/) and framework that works in the three contexts of: 1) RStudio, 2) Rmarkdown, and 3) Shiny.
+
 ## Download
 
 To run locally, first download the repository of files here:
 
 - https://github.com/bbest/shiny-intro/archive/master.zip
 
-Then unzip and launch RStudio into that working directory by double-clicking on the `shiny-intro.Rproj` file.
+(Or use `git clone https://github.com/bbest/shiny-intro.git`.) Then unzip and launch RStudio into that working directory by double-clicking on the `shiny-intro.Rproj` file.
 
 ## `01_faithful`
 
@@ -141,7 +161,10 @@ leaflet(data = quakes[1:20,]) %>%
   
 ## `05_quakes_dashboard`
 
+Use:
 - http://rstudio.github.io/shinydashboard
+- https://github.com/tidyverse/ggplot2
+- https://plot.ly/ggplot2
 
 ```{r}
 library(tidyverse)

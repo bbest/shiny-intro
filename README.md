@@ -16,4 +16,4 @@ Numbered folders in this repository correspond with iterative development and en
 
 You can download all files in this repo at [master.zip](https://github.com/bbest/shiny-intro/archive/master.zip) (or use `git clone https://github.com/bbest/shiny-intro.git`). The latest versions of [R](https://cloud.r-project.org/) and [RStudio](https://www.rstudio.com/products/rstudio/download/#download) are highly recommended to follow along.
 
-Be sure to check out the prepatory chunks of R code and outputs in the Rmarkdown docs/index.Rmd knitted to docs/index.html at https://bbest.github.io/shiny-intro.
+Be sure to check out the prepatory chunks of R code and outputs in the Rmarkdown `docs/index.Rmd` knitted to `docs/index.html` viewable at https://bbest.github.io/shiny-intro.
